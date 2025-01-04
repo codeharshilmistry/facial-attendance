@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <form method="post" action="{{url_for('func2')}}" enctype="multipart/form-data">
+
+        <label for="grpimage">Upload image</label>
+        <input type="file" accept="image/*" name="grpimage" id="InputImage" required><br><br>
+
+        <div style="text-align: center;"><input type="submit"></div>
+    </form>
+</body>
+</html>

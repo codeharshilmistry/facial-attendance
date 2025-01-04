@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: sans-serif;
+        }
+
+        body {
+            height: 100vh;
+            width: 100%;
+            background-image: url(../static/background.png);
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: center;
+            color: rgb(255, 255, 255);
+            background-attachment: fixed;
+        }
+
+        header {
+            padding: 30px 3% 35px;
+            border-bottom: 2px solid rgb(255, 255, 255);
+            width: 100%;
+            backdrop-filter: blur(25px);
+            position: fixed;
+            top: 0;
+            left: 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 5;
+        }
+
+        .heading {
+            font-size: 38px;
+            font-weight: bolder;
+            color: rgb(255, 255, 255);
+        }
+
+        .options {
+            text-decoration: none;
+            font-size: 18px;
+            padding: 5px 9px;
+            color: rgb(255, 255, 255);
+            font-weight: bold;
+            border-radius: 15px;
+            transition: 0.3s;
+        }
+
+        .options:hover {
+            color: rgb(121, 47, 155);
+            background-color: rgb(255, 255, 255);
+            cursor: pointer;
+        }
+
+        .current {
+            text-decoration: none;
+            font-size: 18px;
+            padding: 5px 9px;
+            font-weight: bold;
+            border-radius: 15px;
+            transition: 0.3s;
+            color: rgb(121, 47, 155);
+            background-color: rgb(255, 255, 255);
+        }
+
+        .container1 {
+            width: 100%;
+            padding: 20vh 0 15vh;
+            color: rgb(255, 255, 255);
+        }
+
+        .content1 {
+            text-align: center;
+            padding: 30px 0 20px;
+            font-size: 33px;
+            font-family: sans-serif;
+        }
+
+        .dynamic-text {
+            color: rgb(222, 222, 222);
+            text-shadow: 0 0 10px #000000;
+            font-size: 70px;
+        }
+
+        .container1 p {
+            margin: 40px 0;
+            font-weight: 600;
+            text-shadow: 0 0 40px #000000;
+        }
+
+        .container2 {
+            padding: 20vh 0;
+            text-align: center;
+            background-color: rgb(0, 0, 0, 0.4);
+            border-top: 2px solid white;
+        }
+
+        .content2 {
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .container3 {
+            border-top: 2px solid white;
+            border-bottom: 2px solid white;
+            display: flex;
+            flex-wrap: nowrap;
+        }
+
+        .sub1 {
+            flex: 1;
+            padding: 10vh 5%;
+            border-right: 2px solid white;
+            background-color: rgb(255, 255, 255, 0.2);
+        }
+
+        .sub1 p {
+            font-size: 50px;
+            font-weight: bold;
+            text-shadow: 2px 2px 0 rgb(0, 0, 0);
+        }
+
+        .sub2 {
+            flex: 5;
+            padding: 10vh 3%;
+        }
+
+        .sub2 .q {
+            font-size: 30px;
+            font-weight: bold;
+        }
+
+        .sub2 .a {
+            font-size: 21px;
+            padding-bottom: 15px;
+        }
+
+        .container4 {
+            background-color: rgb(43, 8, 75, 0.8);
+            display: flex;
+        }
+
+        .fsub1,
+        .fsub2,
+        .fsub3 {
+            padding: 8vh 4%;
+            flex: 1;
+        }
+
+        footer p,
+        footer a {
+            color: white;
+            font-size: 19px;
+        }
+
+        .link {
+            display: inline-flex;
+            justify-content: center;
+            gap: 10px;
+            padding-bottom: 15px;
+        }
+
+        .link img {
+            height: 25px;
+            width: 25px;
+            object-fit: contain;
+        }
+
+        .link a {
+            color: white;
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <div class="heading"> Attendance System </div>
+        <div class="options-container">
+            <a class="current" href="">Home</a>
+            <a class="options" href="{{url_for('newstudent')}}">Enter Data</a>
+            <a class="options" href="{{url_for('viewstudent')}}">View Student Data</a>
+            <a class="options" href="{{url_for('attendance')}}">Mark Attendance</a>
+            <a class="options" href="{{url_for('history')}}">History</a>
+            <a class="options" onclick="logout()">Logout</a>
+
+            <script>
+                function logout() {
+                    if (confirm("Logout?") == true) {
+                        window.location.href = '{{ url_for('logout') }}';
+                    }
+                }
+            </script>
+        </div>
+    </header>
+
+    <div class="container1">
+
+        <div class="content1">
+            <p>Want Attendance Marking to be more</p>
+            <p class="dynamic-text"><span><span id="DynamicText">Faster</span>|</span></p>
+            <p>We got you !!</p>
+        </div>
+
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                var DynamicText = document.getElementById('DynamicText');
+                var texts = ["Faster", "Easier", "Efficient"];
+                var currentIndex = 0;
+
+                function clearText(index) {
+                    setTimeout(function () {
+                        var currentText = DynamicText.textContent;
+                        var updatedText = currentText.substring(0, currentText.length - index);
+                        DynamicText.textContent = updatedText;
+
+                        if (index < currentText.length) {
+                            clearText(index + 1);
+                        } else {
+                            // Start displaying the next text
+                            currentIndex = (currentIndex + 1) % texts.length;
+                            displayText(texts[currentIndex], 0);
+                        }
+                    }, 100);
+                }
+
+                function displayText(targetText, index) {
+                    setTimeout(function () {
+                        var updatedText = targetText.substring(0, index + 1);
+                        DynamicText.textContent = updatedText;
+
+                        if (index < targetText.length - 1) {
+                            displayText(targetText, index + 1);
+                        } else {
+                            // Clear the text after a brief pause
+                            setTimeout(function () {
+                                clearText(0);
+                            }, 500);
+                        }
+                    }, 100);
+                }
+
+                // Start the loop
+                clearText(0);
+            });
+        </script>
+
+    </div>
+
+    <div class="container2">
+
+        <h1> Efficient and Accurate Attendance Tracking</h1>
+        <br>
+        <div class="content2">
+
+            <p>Our facial recognition technology revolutionizes the way attendance is marked. Say goodbye to manual
+                processes and <br><br>hello to a seamless and secure experience. The Facial recognition technology is
+                incredibly accurate and saves <br><br>us a lot of time and effort.</p>
+
+        </div>
+
+    </div>
+
+    <div class="container3">
+        <div class="sub1">
+            <p>Frequently Asked Questions</p>
+        </div>
+        <div class="sub2">
+
+            <p class="q">How does facial recognition attendance works?</p>
+            <p class="a">Facial Recognition attendance works by using advanced algorithms to analyze and identify unique
+                facial features of individuals. When a person's face is detected in the uploaded image, the system
+                compares it with the stored facial data to mark attendance.
+            </p>
+
+            <p class="q">Can the system accurately identify individuals in various lighting conditions?</p>
+            <p class="a">Absolutely. Our system incorporates adaptive algorithms that can handle diverse lighting
+                conditions, including low light and harsh sunlight. This adaptability ensures consistent and accurate
+                identification, regardless of environmental lighting variations.
+            </p>
+
+            <p class="q">What are the benefits of using face recognition for attendance management?</p>
+            <p class="a">Using face recognition for attendance management provides several benefits, including improved
+                accuracy, efficiency, and security. It automates attendance recording, reduces administrative workload,
+                minimizes errors, and enhances data integrity.
+            </p>
+
+            <p class="q">What happens if someone is not recognized by the system?</p>
+            <p class="a">In the rare event that someone is not automatically recognized by the system, one can manually
+                mark the attendance for individuals who may face recognition challenges. This ensures that attendance
+                records remain accurate and complete, even in situations where automated recognition may not be
+                achieved.
+            </p>
+
+        </div>
+    </div>
+
+    <footer>
+
+        <div class="container4">
+
+            <div class="fsub1">
+                <h1>Contact us</h1>
+                <p>Email : <a href="mailto:contact@company.com">contact@company.com</a></p>
+                <p>Phone : +91 XXXXX XXXXX</p>
+                <p>Address : KPGU, NH #18, Vadodara</p>
+            </div>
+
+            <div class="fsub2">
+                <h1>Social Media</h1>
+                <div class="link"><img src="../static/instagram.png" alt="Insta Logo"><a
+                        href="https://www.instagram.com">Instagram</a></div><br>
+                <div class="link"><img src="../static/x.jpg" alt="X Logo"><a href="https://www.twitter.com">X</a></div>
+                <br>
+                <div class="link"><img src="../static/youtube.jpg" alt="YT Logo"><a
+                        href="https://www.youtube.com">Youtube</a></div><br>
+                <div class="link"><img src="../static/linkedin.webp" alt="LinkedIn Logo"><a
+                        href="https://www.linkedin.com">LinkedIn</a></div><br>
+            </div>
+            <div class="fsub3">
+                <h1>Copyright</h1>
+                <p>&copy; 2023 Face Attendance. All rights reserved.</p>
+            </div>
+        </div>
+
+    </footer>
+</body>
+
+</html>

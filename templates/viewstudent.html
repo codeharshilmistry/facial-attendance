@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Details</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: sans-serif;
+        }
+
+        body {
+            height: 100vh;
+            width: 100%;
+            background-image: url(../static/background.png);
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: center;
+            color: rgb(255, 255, 255);
+            background-attachment: fixed;
+        }
+
+        header {
+            padding: 30px 3% 35px;
+            border-bottom: 2px solid rgb(255, 255, 255);
+            width: 100%;
+            backdrop-filter: blur(25px);
+            position: fixed;
+            top: 0;
+            left: 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 5;
+        }
+
+        .heading {
+            font-size: 38px;
+            font-weight: bolder;
+            color: rgb(255, 255, 255);
+        }
+
+        .options {
+            text-decoration: none;
+            font-size: 18px;
+            padding: 5px 9px;
+            color: rgb(255, 255, 255);
+            font-weight: bold;
+            border-radius: 15px;
+            transition: 0.3s;
+        }
+
+        .options:hover {
+            color: rgb(121, 47, 155);
+            background-color: rgb(255, 255, 255);
+            cursor: pointer;
+        }
+
+        .current {
+            text-decoration: none;
+            font-size: 18px;
+            padding: 5px 9px;
+            font-weight: bold;
+            border-radius: 15px;
+            transition: 0.3s;
+            color: rgb(121, 47, 155);
+            background-color: rgb(255, 255, 255);
+        }
+
+        .container {
+            padding-top: 200px;
+            padding-bottom: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+        }
+
+        table,
+        tr,
+        td {
+            border: 3px solid rgb(255, 255, 255);
+            border-collapse: collapse;
+            margin: 0 auto;
+            padding: 6px 11px;
+            text-align: center;
+            font-weight: 700;
+        }
+
+        th {
+            border: 3px solid rgb(255, 255, 255);
+            border-collapse: collapse;
+            margin: 0 auto;
+            padding: 13px;
+            text-align: center;
+            font-weight: 700;
+        }
+
+        img {
+            height: 200px;
+            width: 200px;
+            object-fit: contain;
+        }
+
+        td a {
+            text-decoration: underline;
+            text-underline-offset: 3px;
+            color: rgb(255, 255, 255);
+            cursor: pointer;
+            transition: 0.5s;
+        }
+
+        .container4{
+            background-color: rgb(43, 8, 75, 0.8);
+            display: flex;
+        }
+
+        .fsub1, .fsub2, .fsub3{
+            padding: 8vh 4%;
+            flex: 1;
+        }
+
+        footer p, footer a{
+            color: white;
+            font-size: 19px;
+        }
+
+        .link{
+            display: inline-flex;
+            justify-content: center;
+            gap: 10px;
+            padding-bottom: 15px;
+        }
+
+        .link img{
+            height: 25px;
+            width: 25px;
+            object-fit: contain;
+        }
+
+        .link a{
+            color: white;
+        }
+
+    </style>
+    <script src="https://kit.fontawesome.com/0a3eb6b7d4.js" crossorigin="anonymous"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</head>
+
+<body>
+
+    <header>
+        <div class="heading"> Attendance System </div>
+        <div class="options-container">
+            <a class="options" href="{{url_for('home')}}">Home</a>
+            <a class="options" href="{{url_for('newstudent')}}">Enter Data</a>
+            <a class="current" href="#">View Student Data</a>
+            <a class="options" href="{{url_for('attendance')}}">Mark Attendance</a>
+            <a class="options" href="{{url_for('history')}}">History</a>
+            <a class="options" onclick="logout()">Logout</a>
+
+            <script>
+                function logout() {
+                    if (confirm("Logout?") == true) {
+                        window.location.href = '{{ url_for('logout') }}';
+                    }
+                }
+            </script>
+
+        </div>
+    </header>
+
+    <div class="container">
+
+        <table>
+
+            <tr>
+                <th>Sr. No</th>
+                <th>Name</th>
+                <th>Enrollment</th>
+                <th>Contact</th>
+                <th>Email</th>
+                <th>Classroom</th>
+                <th>Image</th>
+                <th>Edit</th>
+                <th>Delete</th>
+            </tr>
+
+            {% for list in data %}
+
+            <tr>
+                <td> {{loop.index}} </td>
+                <td> {{list[1]}} </td>
+                <td> {{list[2]}} </td>
+                <td> {{list[3]}} </td>
+                <td> {{list[4]}} </td>
+                <td> {{list[5]}} </td>
+                <td> <img src="data:image/jpg;charset=utf-8;base64,{{list[6]}}" alt="image" /> </td>
+                <td> <a href="{{ url_for('editdata', id= list[0]) }}">Edit <i class='far fa-edit'></i> </a> </td>
+                <td> <a onclick="deletefunction('{{list[0]}}')">Delete <i class='far fa-trash-alt'></i> </a> </td>
+
+                <script>
+
+                    function deletefunction(id) {
+                        if (confirm("Are you sure about deleting Student details?") == true) {
+                            var value = id;
+                            console.log(value)
+                            $.ajax({
+                                url: '/getid',
+                                type: 'POST',
+                                contentType: 'application/json',
+                                data: JSON.stringify(value),
+                                success: function (response) {
+                                    window.location.href = '{{ url_for('deletedata') }}';
+                                },
+                                error: function (error) {
+                                    console.log(error);
+                                }
+                            });
+                        }
+                    }
+
+                </script>
+
+            </tr>
+
+            {% endfor %}
+
+        </table>
+
+    </div>
+
+    <footer>
+
+        <div class="container4">
+            
+            <div class="fsub1">
+                <h1>Contact us</h1>
+                <p>Email : <a href="mailto:contact@company.com">contact@company.com</a></p>
+                <p>Phone : +91 XXXXX XXXXX</p>
+                <p>Address : KPGU, NH #18, Vadodara</p>
+            </div>
+
+            <div class="fsub2">
+                <h1>Social Media</h1>
+                <div class="link"><img src="../static/instagram.png" alt="Insta Logo"><a href="https://www.instagram.com">Instagram</a></div><br>
+                <div class="link"><img src="../static/x.jpg" alt="X Logo"><a href="https://www.twitter.com">X</a></div><br>
+                <div class="link"><img src="../static/youtube.jpg" alt="YT Logo"><a href="https://www.youtube.com">Youtube</a></div><br>
+                <div class="link"><img src="../static/linkedin.webp" alt="LinkedIn Logo"><a href="https://www.linkedin.com">LinkedIn</a></div><br>
+            </div>
+            <div class="fsub3">
+                <h1>Copyright</h1>
+                <p>&copy; 2023 Face Attendance. All rights reserved.</p>
+            </div>
+        </div>
+
+    </footer>
+
+    {% with messages = get_flashed_messages() %}
+
+    {% if messages %}
+
+    {% for message in messages %}
+
+    <script>
+        alert('{{message}}')
+    </script>
+
+    {% endfor %}
+
+    {% endif %}
+
+    {% endwith %}
+
+</body>
+
+</html>

@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>New Student</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: sans-serif;
+        }
+
+        body {
+            height: 100vh;
+            width: 100%;
+            background-image: url(../static/background.png);
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: center;
+            color: rgb(255, 255, 255);
+            background-attachment: fixed;
+        }
+
+        header {
+            padding: 30px 3% 35px;
+            border-bottom: 2px solid rgb(255, 255, 255);
+            width: 100%;
+            backdrop-filter: blur(25px);
+            position: fixed;
+            top: 0;
+            left: 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 5;
+        }
+
+        .heading {
+            font-size: 38px;
+            font-weight: bolder;
+            color: rgb(255, 255, 255);
+        }
+
+        .options {
+            text-decoration: none;
+            font-size: 18px;
+            padding: 5px 9px;
+            color: rgb(255, 255, 255);
+            font-weight: bold;
+            border-radius: 15px;
+            transition: 0.3s;
+        }
+
+        .options:hover {
+            color: rgb(121, 47, 155);
+            background-color: rgb(255, 255, 255);
+            cursor: pointer;
+        }
+
+        .current {
+            text-decoration: none;
+            font-size: 18px;
+            padding: 5px 9px;
+            font-weight: bold;
+            border-radius: 15px;
+            transition: 0.3s;
+            color: rgb(121, 47, 155);
+            background-color: rgb(255, 255, 255);
+        }
+
+        .container {
+            padding-top: 180px;
+            padding-bottom: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+        }
+
+        .content {
+            padding: 50px 80px;
+            background: transparent;
+            backdrop-filter: blur(40px);
+            border-radius: 25px;
+            border: 1px inset white;
+            box-shadow: 5px 8px 20px rgb(150, 148, 148);
+        }
+
+        table,
+        tr,
+        td {
+            border: 1px solid black;
+            border-collapse: collapse;
+            margin: 0 auto;
+            padding: 15px 30px;
+        }
+
+        img {
+            height: 200px;
+            width: 200px;
+            object-fit: contain;
+        }
+
+        form {
+            font-size: 18px;
+        }
+
+        #PreviewImage {
+            width: 500px;
+            height: 500px;
+            object-fit: contain;
+        }
+
+        #PreviewImageDiv {
+            display: none;
+        }
+
+        label {
+            font-size: 19px;
+            padding: 5px;
+        }
+
+        option,
+        select {
+            padding: 7px 10px;
+            border-radius: 15px;
+            font-weight: bold;
+        }
+
+        input[type=text],
+        input[type=email] {
+            padding: 7px 10px;
+            width: 200px;
+            border-radius: 15px;
+            box-shadow: none;
+            text-align: center;
+            font-weight: bold;
+            border: 0;
+        }
+
+        input[type=submit] {
+            padding: 10px 13px;
+            border-radius: 20px;
+            font-size: 18px;
+            border: 0;
+            font-weight: bold;
+            color: rgb(255, 255, 255);
+            background-color: rgb(121, 47, 155);
+            transition: 0.3s;
+        }
+
+        input[type=submit]:hover {
+            cursor: pointer;
+            color: rgb(121, 47, 155);
+            background-color: rgb(255, 255, 255);
+        }
+
+        .container4 {
+            background-color: rgb(43, 8, 75, 0.8);
+            display: flex;
+        }
+
+        .fsub1,
+        .fsub2,
+        .fsub3 {
+            padding: 8vh 4%;
+            flex: 1;
+        }
+
+        footer p,
+        footer a {
+            color: white;
+            font-size: 19px;
+        }
+
+        .link {
+            display: inline-flex;
+            justify-content: center;
+            gap: 10px;
+            padding-bottom: 15px;
+        }
+
+        .link img {
+            height: 25px;
+            width: 25px;
+            object-fit: contain;
+        }
+
+        .link a {
+            color: white;
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <div class="heading"> Attendance System </div>
+        <div class="options-container">
+            <a class="options" href="{{url_for('home')}}">Home</a>
+            <a class="current" href="#">Enter Data</a>
+            <a class="options" href="{{url_for('viewstudent')}}">View Student Data</a>
+            <a class="options" href="{{url_for('attendance')}}">Mark Attendance</a>
+            <a class="options" href="{{url_for('history')}}">History</a>
+            <a class="options" onclick="logout()">Logout</a>
+            <script>
+                function logout() {
+                    if (confirm("Logout?") == true) {
+                        window.location.href = '{{ url_for('logout') }}';
+                    }
+                }
+            </script>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="content">
+            <form action="{{url_for('adddata')}}" method="post" enctype="multipart/form-data">
+
+                <label for="student_name">Enter Name</label>
+                <input type="text" name="student_name" required> <br><br>
+
+                <label for="student_enrollment">Enter Enrollment number</label>
+                <input type="text" name="student_enrollment" maxlength="10" required> <br><br>
+
+                <label for="student_contact">Enter Contact number</label>
+                <input type="text" name="student_contact" maxlength="10" required> <br><br>
+
+                <label for="student_email">Enter Email-ID</label>
+                <input type="email" name="student_email" required> <br><br>
+
+                <label for="student_classroom">Choose Classroom</label>
+                <select name="student_classroom">
+                    <option value="CSE1">CSE - I</option>
+                    <option value="CSE2">CSE - II</option>
+                    <option value="CSE3">CSE - III</option>
+                    <option value="IT1">IT - I</option>
+                    <option value="IT2">IT - II</option>
+                    <option value="IT3">IT - III</option>
+                    <option value="ME1">ME - I</option>
+                    <option value="ME2">ME - II</option>
+                    <option value="ME3">ME - III</option>
+                    <option value="EE1">EE - I</option>
+                    <option value="EE2">EE - II</option>
+                    <option value="EE3">EE - III</option>
+                </select> <br><br>
+
+                <label for="student_image">Upload image</label>
+                <input type="file" name="student_image" id="InputImage" accept="image/*" required> <br><br>
+
+                <div style="text-align: center;">
+
+                    <div id="PreviewImageDiv"><img id="PreviewImage" alt="Preview Image"></div>
+
+                    <script>
+                        const inputimg = document.getElementById('InputImage');
+                        function hideshowimg() {
+                            if (inputimg.files.length == 0) {
+                                document.getElementById('PreviewImageDiv').style.display = "none";
+                            }
+                            else {
+                                document.getElementById('PreviewImageDiv').style.display = "block";
+                            }
+                        }
+                        inputimg.addEventListener('change', hideshowimg);
+                    </script>
+
+                    <script>
+                        const imageInput = document.getElementById('InputImage');
+                        const previewImage = document.getElementById('PreviewImage');
+                        function previewSelectedImage() {
+                            const file = imageInput.files[0];
+                            if (file) {
+                                const reader = new FileReader();
+                                reader.readAsDataURL(file);
+                                reader.onload = function (e) {
+                                    previewImage.src = e.target.result;
+                                }
+                            }
+                        }
+                        imageInput.addEventListener('change', previewSelectedImage);
+                    </script>
+
+                    <input type="submit" value="Register Student">
+                </div>
+
+            </form>
+        </div>
+    </div>
+
+    <footer>
+
+        <div class="container4">
+
+            <div class="fsub1">
+                <h1>Contact us</h1>
+                <p>Email : <a href="mailto:contact@company.com">contact@company.com</a></p>
+                <p>Phone : +91 XXXXX XXXXX</p>
+                <p>Address : KPGU, NH #18, Vadodara</p>
+            </div>
+
+            <div class="fsub2">
+                <h1>Social Media</h1>
+                <div class="link"><img src="../static/instagram.png" alt="Insta Logo"><a
+                        href="https://www.instagram.com">Instagram</a></div><br>
+                <div class="link"><img src="../static/x.jpg" alt="X Logo"><a href="https://www.twitter.com">X</a></div>
+                <br>
+                <div class="link"><img src="../static/youtube.jpg" alt="YT Logo"><a
+                        href="https://www.youtube.com">Youtube</a></div><br>
+                <div class="link"><img src="../static/linkedin.webp" alt="LinkedIn Logo"><a
+                        href="https://www.linkedin.com">LinkedIn</a></div><br>
+            </div>
+            <div class="fsub3">
+                <h1>Copyright</h1>
+                <p>&copy; 2023 Face Attendance. All rights reserved.</p>
+            </div>
+        </div>
+
+    </footer>
+
+    {% with messages = get_flashed_messages() %}
+
+    {% if messages %}
+
+    {% for message in messages %}
+
+    <script>
+        alert('{{message}}')
+    </script>
+
+    {% endfor %}
+
+    {% endif %}
+
+    {% endwith %}
+
+</body>
+
+</html>
